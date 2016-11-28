@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <fieldset class="form-group">
+                        <label for="shortcut">Enter your shortcut</label>
+                        <input type="text" class="form-control" id="shortcut" placeholder="shortcut">
+                        <small class="text-muted">This is your shortcut</small>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Quick help</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item shortcut-key" data-key="Ctrl">Ctrl</button>
+                        <button type="button" class="list-group-item shortcut-key" data-key="alt">Alt</button>
+                        <button type="button" class="list-group-item shortcut-key" data-key="Umschalt">
+                            <span class="glyphicon glyphicon-arrow-up"></span> Umschalt
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="btn-toolbar" role="toolbar"> 
+                            <div class="btn-group"> 
+                                <button type="button" class="btn btn-default shortcut-key" data-key="0" aria-label="0">
+                                    0
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="1" aria-label="1">
+                                    1
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="2" aria-label="2">
+                                    2
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="3" aria-label="3">
+                                    3
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="4" aria-label="4">
+                                    4
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="5" aria-label="5">
+                                    5
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="6" aria-label="6">
+                                    6
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="7" aria-label="7">
+                                    7
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="8" aria-label="8">
+                                    8
+                                </button>
+                                <button type="button" class="btn btn-default shortcut-key" data-key="9" aria-label="9">
+                                    9
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row" id="keyboard-layout">
+
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                (function () {
+                    
+                    function clickHandler(data, handler) {
+//                            console.log("data/handler", data, handler);
+                            var currentTarget = data.currentTarget;
+                            var data = $(currentTarget).attr("data-key");
+                            console.log("Key clicked", data);
+                            var prevData = $(shortcut).val();
+                            if (prevData !== "") {
+                                prevData += " + " + data;
+                            } else {
+                                prevData = data;
+                            }
+                            $("#shortcut").val(prevData);
+                            top.tinymce.activeEditor.windowManager.setParams({"data": prevData});
+
+                        }
+                    
+                    var dialogArguments = top.tinymce.activeEditor.windowManager.getParams();
+                    console.log("hello plugin", dialogArguments, dialogArguments.jquery);
+                    console.log("editor", top.tinymce.activeEditor);
+                    console.log("editor2", window.parent.tinyMCE.activeEditor);
+
+                    var loadJS = function (url, implementationCode, location) {
+                        //url is URL of external file, implementationCode is the code
+                        //to be called from the file, location is the location to 
+                        //insert the <script> element
+
+                        var scriptTag = document.createElement('script');
+                        scriptTag.src = url;
+
+                        scriptTag.onload = implementationCode;
+                        scriptTag.onreadystatechange = implementationCode;
+
+                        location.appendChild(scriptTag);
+                    };
+                    var keys = ["qwertzuiop", "asdfghjkl", "yxcvbnm"];
+
+                    var initKeyboardLayout = function (keyPattern) {
+                        var layoutDiv = $("#keyboard-layout");
+
+                        for (var i = 0; i < keyPattern.length; i++) {
+                            var colDiv = document.createElement("div");
+                            colDiv.setAttribute("class", "col-sm-12");
+                            $.each(keyPattern[i].split(""), function (index, value) {
+                                var btnKey = document.createElement("button");
+                                btnKey.setAttribute("class", "btn btn-default shortcut-key");
+                                btnKey.setAttribute("type", "button");
+                                btnKey.setAttribute("data-key", value);
+                                $(btnKey).val(value);
+                                $(btnKey).html(value);
+                                $(btnKey).click(clickHandler);
+                                $(colDiv).append(btnKey);
+                            });
+                            $(layoutDiv).append(colDiv);
+                        }
+                    };
+
+                    var mycodecall = function () {
+                        var btnControls = $(".shortcut-key");
+                        console.log("controls", btnControls);
+                        console.log("insert keyboard");
+                        initKeyboardLayout(keys);
+
+                        //detect manually changes of the input field
+                        $("#shortcut").on("change paste keyup", function () {
+                            var dataVal = $("#shortcut").val();
+                            top.tinymce.activeEditor.windowManager.setParams({"data": dataVal});
+                        });
+
+                        //detect button clicks
+                        btnControls.click(clickHandler);
+
+                        var element = top.tinymce.activeEditor.selection.getNode();
+                        console.log("selection=", element);
+                        if (element !== null) {
+                            $("#shortcut").val(element.innerText);
+                        }
+                    };
+
+                    var link = document.createElement('link');
+                    link.setAttribute('rel', 'stylesheet');
+                    link.setAttribute('type', 'text/css');
+                    link.setAttribute('href', dialogArguments.boostrap);
+                    document.getElementsByTagName('head')[0].appendChild(link);
+
+                    loadJS(dialogArguments.jquery, mycodecall, document.body);
+
+
+                })();
+            </script>
+        </div>
+    </body>
+</html>

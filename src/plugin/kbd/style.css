@@ -1,0 +1,17 @@
+/* 
+    Created on : 19.05.2016, 11:14:13
+    Author     : Dominik Grzelak
+*/
+
+input {
+    padding: 2px;
+    margin-left: 12px;
+    margin-top: 12px;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+input:hover {
+    border: none;
+    border-bottom: 1px dashed gray;
+}

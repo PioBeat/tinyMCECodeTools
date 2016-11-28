@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Testpage for Typesetting Code Plugins for tinyMCE</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     </head>
     <body>
-        <div>Example</div>
+        <div>Example 1</div>
 
         <textarea></textarea>
     </body>
 
+
     <script src="../../libs/jquery-1.12.3.min.js"></script>
     <script src="../../libs/tinymce/tinymce.min.js"></script>
-    <!--<script src="../../plugin/kbd/plugin.min.js"></script>-->
+
+    <!--
+    <script src="../../plugin/latexeditor/plugin.min.js"></script>
+    <script src="../../plugin/kbd/plugin.min.js"></script>
+    <script src="../../plugin/preCode/plugin.min.js"></script>
+    -->
+    
     <script>
         function getBaseURL() {
             return location.protocol + "//" + location.hostname +
@@ -22,9 +30,9 @@
         }
         tinymce.init({
             selector: 'textarea',
-            plugins: 'kbd',
-            toolbar: 'kbd',
-            jqueryPath: getBaseURL() + "TinyMCECodeToolsPlugins/src/libs/jquery-1.12.3.min.js", 
+            plugins: ['kbd', 'preCode', 'latexeditor'],
+            toolbar: ['kbd', 'preCode', 'latexeditorButton'],
+            jqueryPath: getBaseURL() + "TinyMCECodeToolsPlugins/src/libs/jquery-1.12.3.min.js",
             boostrapCSS: getBaseURL() + "TinyMCECodeToolsPlugins/src/libs/bootstrap.min.css"
         });
     </script>
