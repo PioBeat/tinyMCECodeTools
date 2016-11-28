@@ -24,12 +24,12 @@ A complete example webpage can be found in the folder `./test`. There you see th
 ## Quick Installation
 
 You can build all sources by yourself but if you want to start right away the following quick start option is available:
-Download the latest release here (archive in folder `./dist`) and follow the instructions below.
+Download the latest release here (all folders in folder `./src/plugin`) and follow the instructions below.
 
 ### Easy Way with final version
 1. Install the [Tiny MCE Editor] (https://www.tinymce.com/)
   * see the docs https://www.tinymce.com/docs/get-started/ on how to configure and use TinyMCE  
-2. Find the TinyMCE plugins folder, `~/tinymce/plugins` (where `~/tinymce` is the root directory of the TinyMCE installation) and copy all directories from the archive into it.
+2. Find the TinyMCE plugins folder, `~/tinymce/plugins` (where `~/tinymce` is the root directory of the TinyMCE installation) and copy all directories from `./src/plugin` into it.
 3. Integrate TinyMCE into your web page in the normal way.
 4. On your web page, locate the **TinyMCE.init** function, and add the following names to the plugins property: 'preCode', 'kbd', 'latexeditor'
   * Do the same with the toolbar property if you want to add buttons of the corresponding plugins in the TinyMCE toolbar 
