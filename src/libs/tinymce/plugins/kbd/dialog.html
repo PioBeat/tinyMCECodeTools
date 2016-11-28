@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--<link rel="stylesheet" href="style.css" type="text/css">-->
     </head>
     <body>
         <div class="container">
@@ -71,6 +70,7 @@
                             </div>
                         </div>
                     </div>
+                    <br/>
                     <div class="row" id="keyboard-layout">
 
                     </div>
@@ -79,11 +79,25 @@
 
             <script>
                 (function () {
-                    var dialogArguments = top.tinymce.activeEditor.windowManager.getParams();
-                    console.log("hello plugin", dialogArguments, dialogArguments.jquery);
-                    console.log("editor", top.tinymce.activeEditor);
-                    console.log("editor2", window.parent.tinyMCE.activeEditor);
+                    
+                    function clickHandler(data, handler) {
+//                            console.log("data/handler", data, handler);
+                            var currentTarget = data.currentTarget;
+                            var data = $(currentTarget).attr("data-key");
+                            var prevData = $(shortcut).val();
+                            if (prevData !== "") {
+                                prevData += " + " + data;
+                            } else {
+                                prevData = data;
+                            }
+                            $("#shortcut").val(prevData);
+                            top.tinymce.activeEditor.windowManager.setParams({"data": prevData});
 
+                        }
+                    
+                    var dialogArguments = top.tinymce.activeEditor.windowManager.getParams();
+
+                    //source: http://stackoverflow.com/a/31374433
                     var loadJS = function (url, implementationCode, location) {
                         //url is URL of external file, implementationCode is the code
                         //to be called from the file, location is the location to 
@@ -104,24 +118,23 @@
 
                         for (var i = 0; i < keyPattern.length; i++) {
                             var colDiv = document.createElement("div");
-                            colDiv.setAttribute("class", "col-sm-10");
+                            colDiv.setAttribute("class", "col-sm-12");
                             $.each(keyPattern[i].split(""), function (index, value) {
                                 var btnKey = document.createElement("button");
                                 btnKey.setAttribute("class", "btn btn-default shortcut-key");
                                 btnKey.setAttribute("type", "button");
                                 btnKey.setAttribute("data-key", value);
                                 $(btnKey).val(value);
+                                $(btnKey).html(value);
+                                $(btnKey).click(clickHandler);
                                 $(colDiv).append(btnKey);
                             });
                             $(layoutDiv).append(colDiv);
                         }
-
                     };
 
                     var mycodecall = function () {
                         var btnControls = $(".shortcut-key");
-                        console.log("controls", btnControls);
-
                         initKeyboardLayout(keys);
 
                         //detect manually changes of the input field
@@ -131,24 +144,9 @@
                         });
 
                         //detect button clicks
-                        btnControls.click(function (data, handler) {
-//                            console.log("data/handler", data, handler);
-                            var currentTarget = data.currentTarget;
-                            var data = $(currentTarget).attr("data-key");
-                            console.log("Key clicked", data);
-                            var prevData = $(shortcut).val();
-                            if (prevData !== "") {
-                                prevData += " + " + data;
-                            } else {
-                                prevData = data;
-                            }
-                            $("#shortcut").val(prevData);
-                            top.tinymce.activeEditor.windowManager.setParams({"data": prevData});
-
-                        });
+                        btnControls.click(clickHandler);
 
                         var element = top.tinymce.activeEditor.selection.getNode();
-                        console.log("selection=", element);
                         if (element !== null) {
                             $("#shortcut").val(element.innerText);
                         }
@@ -162,8 +160,8 @@
 
                     loadJS(dialogArguments.jquery, mycodecall, document.body);
 
-
                 })();
             </script>
+        </div>
     </body>
 </html>

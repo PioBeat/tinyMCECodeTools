@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            var options = [
+                {value: "cpp", name: "C++"},
+                {value: "php", name: "PHP"},
+                {value: "javascript", name: "JavaScript"},
+                {value: "r", name: "R"},
+                {value: "clike", name: "C-like"},
+                {value: "markup", name: "Markup"},
+                {value: "none", name: "None"},
+            ];
+            
+            function setVar() {
+                var valCode = document.getElementById("codearea").value;
+                valCode = valCode.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+                valCode = "<pre><code>" + valCode + "</code></pre>";
+                top.tinymce.activeEditor.codeareaContent = 'new_special_blah';
+            }
+            
+            function showDialog() {
+                var optElement = document.getElementById("codeStyle");
+                for (var i = 0; i < options.length; i++) {
+                    var selectNode = document.createElement("OPTION");
+                    selectNode.setAttribute("value", options[i].value);
+                    selectNode.innerHTML = options[i].name;
+                    optElement.appendChild(selectNode);
+                }
+
+                var element = top.tinymce.activeEditor.selection.getNode();
+                val = element.childNodes[0].textContent;
+                document.getElementById("codearea").value = val;
+            }
+
+            function submitForm() {
+                var valCode = document.getElementById("codearea").value;
+                var idx = document.getElementById("codeStyle").selectedIndex;
+                var langValue = "language-" + options[idx].value;
+                
+                valCode = valCode.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+                valCode = "<pre><code class=\"" + langValue + "\">" + valCode + "</code></pre>";
+
+                top.tinymce.activeEditor.selection.getNode().innerHTML = valCode;
+                top.tinymce.activeEditor.windowManager.close();
+                return false;
+            }
+
+            //window.onload = showDialog();
+        </script>  
+    </head>
+    <body onload="showDialog();">
+        <textarea id="codearea" name="codearea" style="width: 100%; height: 300px;"
+                  onkeyup="setVar();" onblur="setVar();" onchange="setVar();">
+        </textarea>
+        <select id="codeStyle">
+        </select>
+        <input type="submit" value="OK" onclick="submitForm();"/>
+
+    </body>
+</html>

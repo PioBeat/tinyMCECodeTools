@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="modal-body">
+            <textarea style="width: 100%; height: 150px;" id="latex-code-content"></textarea>
+            <p class="small">Enter your latex code above and see the result below</p>
+            <h3 style="text-align: center;">Result</h3>
+            <div id="latex-result" style="text-align: center;" >
+                <!--lang="latex"-->
+                <img id="latex-result-image" src="http://latex.codecogs.com/gif.latex?" alt="" class="latex" border="0"> 
+            </div>
+
+        </div>
+        
+        <script>
+            var dialogArguments = top.tinymce.activeEditor.windowManager.getParams();
+            console.log("hello plugin", dialogArguments, dialogArguments.jquery);
+            console.log("editor", top.tinymce.activeEditor);
+            console.log("editor2", window.parent.tinyMCE.activeEditor);
+            document.getElementById("latex-code-content").value = dialogArguments.sourceInput;
+            document.getElementById("latex-code-content").onkeyup = function () {
+                var code = document.getElementById('latex-code-content').value;
+                console.log("code", code);
+                document.getElementById('latex-result-image').setAttribute("src", "http://latex.codecogs.com/gif.latex?" + code);
+                document.getElementById('latex-result-image').setAttribute("alt", code);
+                top.tinymce.activeEditor.windowManager.setParams({"data": code});
+            };
+        </script>
+    </body>
+</html>
