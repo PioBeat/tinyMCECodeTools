@@ -84,7 +84,6 @@
 //                            console.log("data/handler", data, handler);
                             var currentTarget = data.currentTarget;
                             var data = $(currentTarget).attr("data-key");
-                            console.log("Key clicked", data);
                             var prevData = $(shortcut).val();
                             if (prevData !== "") {
                                 prevData += " + " + data;
@@ -97,10 +96,8 @@
                         }
                     
                     var dialogArguments = top.tinymce.activeEditor.windowManager.getParams();
-                    console.log("hello plugin", dialogArguments, dialogArguments.jquery);
-                    console.log("editor", top.tinymce.activeEditor);
-                    console.log("editor2", window.parent.tinyMCE.activeEditor);
 
+                    //source: http://stackoverflow.com/a/31374433
                     var loadJS = function (url, implementationCode, location) {
                         //url is URL of external file, implementationCode is the code
                         //to be called from the file, location is the location to 
@@ -138,8 +135,6 @@
 
                     var mycodecall = function () {
                         var btnControls = $(".shortcut-key");
-                        console.log("controls", btnControls);
-                        console.log("insert keyboard");
                         initKeyboardLayout(keys);
 
                         //detect manually changes of the input field
@@ -152,7 +147,6 @@
                         btnControls.click(clickHandler);
 
                         var element = top.tinymce.activeEditor.selection.getNode();
-                        console.log("selection=", element);
                         if (element !== null) {
                             $("#shortcut").val(element.innerText);
                         }
@@ -165,7 +159,6 @@
                     document.getElementsByTagName('head')[0].appendChild(link);
 
                     loadJS(dialogArguments.jquery, mycodecall, document.body);
-
 
                 })();
             </script>
